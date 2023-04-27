@@ -1,0 +1,41 @@
+library(caret)
+
+#set working directory 
+setwd()
+
+# Load dataset
+data <- read.csv("")
+
+# Split data into training and testing sets
+set.seed(123)
+trainIndex <- createDataPartition(data$target_variable, p = 0.7, list = FALSE)
+trainData <- data[trainIndex, ]
+testData <- data[-trainIndex, ]
+
+# Define models
+model1 <- train(target_variable ~ ., data = trainData, method = "")
+model2 <- train(target_variable ~ ., data = trainData, method = "")
+model3 <- train(target_variable ~ ., data = trainData, method = "")
+model4 <- train(target_variable ~ ., data = trainData, method = "")
+model5 <- train(target_variable ~ ., data = trainData, method = "")
+
+# Make predictions on test data using each model
+prediction1 <- predict(model1, testData)
+prediction2 <- predict(model2, testData)
+prediction3 <- predict(model3, testData)
+prediction4 <- predict(model4, testData)
+prediction5 <- predict(model5, testData)
+
+# Calculate the accuracy of each model
+accuracy1 <- confusionMatrix(prediction1, testData$target_variable)$overall[1]
+accuracy2 <- confusionMatrix(prediction2, testData$target_variable)$overall[1]
+accuracy3 <- confusionMatrix(prediction3, testData$target_variable)$overall[1]
+accuracy4 <- confusionMatrix(prediction4, testData$target_variable)$overall[1]
+accuracy5 <- confusionMatrix(prediction5, testData$target_variable)$overall[1]
+
+# Calculate the weighted average of the accuracies
+weights <- c(0.2, 0.2, 0.2, 0.2, 0.2)
+weighted_accuracy <- sum(weights * c(accuracy1, accuracy2, accuracy3, accuracy4, accuracy5))
+
+# Print the weighted accuracy
+print(weighted_accuracy)
