@@ -1,0 +1,108 @@
+
+
+#set working directory 
+setwd()
+
+main_algorithm <- function(image){
+algorithm1 <- function(x,P){}
+algorithm2 <- function(x,P){}
+algorithm3 <- function(x,P){}
+algorithm4 <- function(x,P){}
+algorithm5 <- function(x,P){}
+
+#results of algorithm predictions
+original_prediction = c()
+a1results = c()
+a2results = c()
+a3results = c()
+a4results = c()
+a5results = c()
+
+
+res=c("","")
+f=list.files("/Users/hallelin/Library/CloudStorage/OneDrive-purdue.edu/SPRING 2023/IE332/Project 2/grass")
+for (i in f){
+  test_image <- image_load(paste("/Users/hallelin/Library/CloudStorage/OneDrive-purdue.edu/SPRING 2023/IE332/Project 2/grass/",i,sep=""),,target_size=c(224,224))
+  file_path <- paste("/Users/hallelin/Library/CloudStorage/OneDrive-purdue.edu/SPRING 2023/IE332/Project 2/grass/",i,sep="")
+  x <- image_to_array(test_image)
+  x <- array_reshape(x, c(1, dim(x)))
+  x <- x/224
+  
+  #run algorithms and produce images that are saved in the same directory
+  algorithm1(x,P)
+  algorithm2(x,P)
+  algorithm3(x,P)
+  algorithm4(x,P)
+  algorithm5(x,P)
+  
+  
+  #load in adversarial images 
+  al1 <- image_load(paste("/Users/hallelin/Library/CloudStorage/OneDrive-purdue.edu/SPRING 2023/IE332/Project 2/results/",i,sep=""),target_size=c(224,224))
+  al2 <- image_load(paste("/Users/hallelin/Library/CloudStorage/OneDrive-purdue.edu/SPRING 2023/IE332/Project 2/results/",i,sep=""),target_size=c(224,224))
+  al3 <- image_load(paste("/Users/hallelin/Library/CloudStorage/OneDrive-purdue.edu/SPRING 2023/IE332/Project 2/results/",i,sep=""),target_size=c(224,224))
+  al4 <- image_load(paste("/Users/hallelin/Library/CloudStorage/OneDrive-purdue.edu/SPRING 2023/IE332/Project 2/results/",i,sep=""),target_size=c(224,224))
+  al5 <- image_load(paste("/Users/hallelin/Library/CloudStorage/OneDrive-purdue.edu/SPRING 2023/IE332/Project 2/results/",i,sep=""),target_size=c(224,224))
+
+  
+  al1new <- image_to_array(al1)
+  al1new <- array_reshape(al1new, c(1, dim(al1new)))
+  al1new <- al1new/224
+  
+  al2new <- image_to_array(al2)
+  al2new <- array_reshape(al2new, c(1, dim(al2new)))
+  al2new <- al2new/224
+  
+  al3new <- image_to_array(al3)
+  al3new <- array_reshape(al3new, c(1, dim(al3new)))
+  al3new <- al3new/224
+  
+  al4new <- image_to_array(al4)
+  al4new <- array_reshape(al4new, c(1, dim(al4new)))
+  al4new <- al4new/224
+  
+  al5new <- image_to_array(al5)
+  al5new <- array_reshape(al5new, c(1, dim(al5new)))
+  al5new <- al5new/224
+  
+  
+  original_prediction <- which.max( model %>% predict(x))
+  a1results <- c(a1results,which.max( model %>% predict(al1new)))
+  a2results <- c(a1results,which.max( model %>% predict(al2new)))
+  a3results <- c(a1results,which.max( model %>% predict(al3new)))
+  a4results <- c(a1results,which.max( model %>% predict(al4new)))
+  a5results <- c(a1results,which.max( model %>% predict(al5new)))
+}
+
+results = as.data.frame(original = original_prediction, a1 = a1results,a2 = a2results, a3 = a3results, a4 = a4results, a5 = a5results)
+
+accuracy1 = sum(ifelse(results$original==results$a1,1,0))
+accruacy2 = sum(ifelse(results$original==results$a2,1,0))
+accruacy3 = sum(ifelse(results$original==results$a3,1,0))
+accruacy4 = sum(ifelse(results$original==results$a4,1,0))
+accruacy5 = sum(ifelse(results$original==results$a5,1,0))
+
+#weighted
+total_accuracy = sum(accuracy1,accuracy2,accuracy3,accuracy4,accuracy5)
+weight1 = accuracy1/total_accuracy
+weight2 = accuracy2/total_accuracy
+weight3 = accuracy3/total_accuracy
+weight4 = accuracy4/total_accuracy
+weight5 = accuracy5/total_accuracy
+
+algorithm1(image,weight1)
+algorithm2(x,weight2)
+algorithm3(x,weight3)
+algorithm4(x,weight4)
+algorithm5(x,weight5)
+
+}
+
+
+
+
+
+
+
+
+
+  
